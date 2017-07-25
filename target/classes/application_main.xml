@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                        http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+                        http://www.springframework.org/schema/context
+                        http://www.springframework.org/schema/context/spring-context-3.1.xsd
+                        http://www.springframework.org/schema/mvc
+                        http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd">
+
+    <!-- 自动扫描 -->
+    <context:component-scan base-package="com.cnc.qoss.openqs"/>
+
+    <context:annotation-config/>
+    <!-- 激活annotation功能 -->
+    <context:spring-configured/>
+    <bean id="springContextUtil" class="com.cnc.qoss.jstorm.utils.SpringContextUtil"/>
+
+    <!-- 主系统主库 -->
+    <bean id="Source_main" class="com.alibaba.druid.pool.DruidDataSource"
+          lazy-init="true">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+        <property name="url"
+                  value="jdbc:mysql://115.231.24.170:63763/qoss_bench?useUnicode=true&amp;characterEncoding=UTF-8&amp;useServerPrepStmts=true"/>
+        <property name="username" value="root"/>
+        <property name="password" value="qossv1@wangsucdnrd2"/>
+        <property name="initialSize" value="5"/>
+        <property name="minIdle" value="2"/>
+        <property name="maxActive" value="10"/>
+        <property name="maxWait" value="60000"/>
+        <property name="timeBetweenEvictionRunsMillis" value="60000"/>
+        <property name="minEvictableIdleTimeMillis" value="300000"/>
+    </bean>
+
+    <!-- 主系统备库 -->
+    <bean id="Source_bak" class="com.alibaba.druid.pool.DruidDataSource"
+          lazy-init="true">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+        <property name="url"
+                  value="jdbc:mysql://115.231.24.163:63763/qoss_bench?useUnicode=true&amp;characterEncoding=UTF-8&amp;useServerPrepStmts=true"/>
+        <property name="username" value="root"/>
+        <property name="password" value="qossv1@wangsucdnrd2"/>
+        <property name="initialSize" value="5"/>
+        <property name="minIdle" value="2"/>
+        <property name="maxActive" value="10"/>
+        <property name="maxWait" value="60000"/>
+        <property name="timeBetweenEvictionRunsMillis" value="60000"/>
+        <property name="minEvictableIdleTimeMillis" value="300000"/>
+    </bean>
+
+    <bean id="multipleDataSource" class="com.cnc.qoss.openqs.dataSource.MultipleDataSource">
+        <property name="defaultTargetDataSource" ref="Source_main"/>
+        <property name="targetDataSources">
+            <map>
+                <entry key="maindataSource" value-ref="Source_main"/>
+                <entry key="bakdataSource" value-ref="Source_bak"/>
+            </map>
+        </property>
+    </bean>
+
+    <!-- spring和MyBatis完美整合，不需要mybatis的配置映射文件 -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="multipleDataSource"/>
+        <!-- 自动扫描mapping.xml文件 -->
+        <property name="mapperLocations" value="classpath:com/cnc/qoss/openqs/mapping/*Mapper.xml"></property>
+    </bean>
+
+    <!-- DAO接口所在包名，Spring会自动查找其下的类 -->
+    <bean id="mapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.cnc.qoss.openqs.dao"/>
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+    </bean>
+
+    <!-- (事务管理)transaction manager, use JtaTransactionManager for global tx -->
+    <bean id="transactionManager"
+          class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="multipleDataSource"/>
+    </bean>
+</beans>

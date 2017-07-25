@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dna version="1.0" xmlns="http://www.chinanetcenter.com/xml/ns/dna">
+	<!-- subscription -->
+	<subs>
+
+		<subservice appCode="openQS" serviceName="TaskManage"
+					version="1"
+					serviceIface="com.cnc.dna.api.openQS.TaskManage.v1.TaskManage.Iface"
+					timeout="3600" />
+
+		<subservice appCode="openQS" serviceName="StatisticsReport"
+					version="1"
+					serviceIface="com.cnc.dna.api.openQS.StatisticsReport.v1.StatisticsReport.Iface"
+					timeout="3600" />
+
+	</subs>
+
+</dna>

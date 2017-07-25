@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cnc.qoss.openqs.dao.ChannelDao" >
+  <resultMap id="BaseResultMap" type="com.cnc.qoss.openqs.entity.mysqlObj.Channel" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="app_group_id" property="appGroupId" jdbcType="INTEGER" />
+    <result column="customer" property="customer" jdbcType="VARCHAR" />
+    <result column="hash" property="hash" jdbcType="INTEGER" />
+    <result column="db_suffix" property="dbSuffix" jdbcType="INTEGER" />
+    <result column="tb_suffix" property="tbSuffix" jdbcType="INTEGER" />
+    <result column="product_line" property="productLine" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, name, app_group_id, customer, hash, db_suffix, tb_suffix, product_line
+  </sql>
+  <select id="selectAll" resultMap="BaseResultMap" >
+      select * FROM channel
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from channel
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from channel
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.cnc.qoss.openqs.entity.mysqlObj.Channel" >
+    insert into channel (id, name, app_group_id, 
+      customer, hash, db_suffix, 
+      tb_suffix, product_line)
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{appGroupId,jdbcType=INTEGER}, 
+      #{customer,jdbcType=VARCHAR}, #{hash,jdbcType=INTEGER}, #{dbSuffix,jdbcType=INTEGER}, 
+      #{tbSuffix,jdbcType=INTEGER}, #{productLine,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.cnc.qoss.openqs.entity.mysqlObj.Channel" >
+    insert into channel
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="appGroupId != null" >
+        app_group_id,
+      </if>
+      <if test="customer != null" >
+        customer,
+      </if>
+      <if test="hash != null" >
+        hash,
+      </if>
+      <if test="dbSuffix != null" >
+        db_suffix,
+      </if>
+      <if test="tbSuffix != null" >
+        tb_suffix,
+      </if>
+      <if test="productLine != null" >
+        product_line,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="appGroupId != null" >
+        #{appGroupId,jdbcType=INTEGER},
+      </if>
+      <if test="customer != null" >
+        #{customer,jdbcType=VARCHAR},
+      </if>
+      <if test="hash != null" >
+        #{hash,jdbcType=INTEGER},
+      </if>
+      <if test="dbSuffix != null" >
+        #{dbSuffix,jdbcType=INTEGER},
+      </if>
+      <if test="tbSuffix != null" >
+        #{tbSuffix,jdbcType=INTEGER},
+      </if>
+      <if test="productLine != null" >
+        #{productLine,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cnc.qoss.openqs.entity.mysqlObj.Channel" >
+    update channel
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="appGroupId != null" >
+        app_group_id = #{appGroupId,jdbcType=INTEGER},
+      </if>
+      <if test="customer != null" >
+        customer = #{customer,jdbcType=VARCHAR},
+      </if>
+      <if test="hash != null" >
+        hash = #{hash,jdbcType=INTEGER},
+      </if>
+      <if test="dbSuffix != null" >
+        db_suffix = #{dbSuffix,jdbcType=INTEGER},
+      </if>
+      <if test="tbSuffix != null" >
+        tb_suffix = #{tbSuffix,jdbcType=INTEGER},
+      </if>
+      <if test="productLine != null" >
+        product_line = #{productLine,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cnc.qoss.openqs.entity.mysqlObj.Channel" >
+    update channel
+    set name = #{name,jdbcType=VARCHAR},
+      app_group_id = #{appGroupId,jdbcType=INTEGER},
+      customer = #{customer,jdbcType=VARCHAR},
+      hash = #{hash,jdbcType=INTEGER},
+      db_suffix = #{dbSuffix,jdbcType=INTEGER},
+      tb_suffix = #{tbSuffix,jdbcType=INTEGER},
+      product_line = #{productLine,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
